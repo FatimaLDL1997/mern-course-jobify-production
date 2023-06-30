@@ -60,7 +60,7 @@ const Wrapper = styled.section`
       align-items: center;
       column-gap: 1rem;
       align-items: start;
-
+      text-align: left;
     }
     .btn-container {
       margin-top: 0;
@@ -70,6 +70,8 @@ const Wrapper = styled.section`
     .form-center {
       grid-template-columns: 1fr 1fr 1fr;
       align-items: start;
+      text-align: left;
+
     }
     .form-center button {
       margin-top: 0;
