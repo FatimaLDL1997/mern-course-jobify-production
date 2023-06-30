@@ -45,8 +45,8 @@ const initialState = {
   showSidebar: false,
   isEditing: false,
   editJobId: '',
-  position: '',
-  company: '',
+  title: '',
+  note: '',
   jobLocation: '',
   jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
   jobType: 'full-time',
@@ -88,7 +88,7 @@ const AppProvider = ({ children }) => {
         logoutUser();
       }
       return Promise.reject(error);
-    }
+    } 
   );
 
   const displayAlert = () => {
@@ -161,10 +161,10 @@ const AppProvider = ({ children }) => {
   const createJob = async () => {
     dispatch({ type: CREATE_JOB_BEGIN });
     try {
-      const { position, company, jobLocation, jobType, status } = state;
-      await authFetch.post('/jobs', {
-        position,
-        company,
+      const { title, note, jobLocation, jobType, status } = state;
+      await authFetch.post('/notes', {
+        title,
+        note,
         jobLocation,
         jobType,
         status,
@@ -184,7 +184,9 @@ const AppProvider = ({ children }) => {
   const getJobs = async () => {
     const { page, search, searchStatus, searchType, sort } = state;
 
-    let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    // let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    let url = `/notes?page=${page}&sort=${sort}`;
+
     if (search) {
       url = url + `&search=${search}`;
     }
@@ -213,10 +215,10 @@ const AppProvider = ({ children }) => {
     dispatch({ type: EDIT_JOB_BEGIN });
 
     try {
-      const { position, company, jobLocation, jobType, status } = state;
-      await authFetch.patch(`/jobs/${state.editJobId}`, {
-        company,
-        position,
+      const { title, note, jobLocation, jobType, status } = state;
+      await authFetch.patch(`/notes/${state.editJobId}`, {
+        note,
+        title,
         jobLocation,
         jobType,
         status,
@@ -235,7 +237,7 @@ const AppProvider = ({ children }) => {
   const deleteJob = async (jobId) => {
     dispatch({ type: DELETE_JOB_BEGIN });
     try {
-      await authFetch.delete(`/jobs/${jobId}`);
+      await authFetch.delete(`/notes/${jobId}`);
       getJobs();
     } catch (error) {
       if (error.response.status === 401) return;
@@ -246,22 +248,7 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
-  const showStats = async () => {
-    dispatch({ type: SHOW_STATS_BEGIN });
-    try {
-      const { data } = await authFetch('/jobs/stats');
-      dispatch({
-        type: SHOW_STATS_SUCCESS,
-        payload: {
-          stats: data.defaultStats,
-          monthlyApplications: data.monthlyApplications,
-        },
-      });
-    } catch (error) {
-      logoutUser();
-    }
-    clearAlert();
-  };
+  
   const clearFilters = () => {
     dispatch({ type: CLEAR_FILTERS });
   };
@@ -284,6 +271,22 @@ const AppProvider = ({ children }) => {
       logoutUser();
     }
   };
+  //   const showStats = async () => {
+  //   dispatch({ type: SHOW_STATS_BEGIN });
+  //   try {
+  //     const { data } = await authFetch('/jobs/stats');
+  //     dispatch({
+  //       type: SHOW_STATS_SUCCESS,
+  //       payload: {
+  //         stats: data.defaultStats,
+  //         monthlyApplications: data.monthlyApplications,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     logoutUser();
+  //   }
+  //   clearAlert();
+  // };
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -304,7 +307,7 @@ const AppProvider = ({ children }) => {
         setEditJob,
         deleteJob,
         editJob,
-        showStats,
+        // showStats,
         clearFilters,
         changePage,
       }}

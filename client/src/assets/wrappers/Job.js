@@ -8,11 +8,12 @@ const Wrapper = styled.article`
   box-shadow: var(--shadow-2);
 
   header {
-    padding: 1rem 1.5rem;
+    padding: 3rem 2.5rem;
     border-bottom: 1px solid var(--grey-100);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
+    display: flex;
+    justify-content: center;
+    /* grid-template-columns: auto 1fr;
+    align-items: center; */
     h5 {
       letter-spacing: 0;
     }
@@ -33,12 +34,15 @@ const Wrapper = styled.article`
   .info {
     h5 {
       margin-bottom: 0.25rem;
+      text-align: center;
+
     }
     p {
       margin: 0;
       text-transform: capitalize;
       color: var(--grey-400);
       letter-spacing: var(--letterSpacing);
+      text-align: center;
     }
   }
   .pending {
@@ -55,6 +59,10 @@ const Wrapper = styled.article`
   }
   .content {
     padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
   }
   .content-center {
     display: grid;

@@ -1,4 +1,4 @@
-import Job from '../models/Job.js';
+import Note from '../models/Note.js';
 import { StatusCodes } from 'http-status-codes';
 import {
   BadRequestError,
@@ -9,14 +9,14 @@ import checkPermissions from '../utils/checkPermissions.js';
 import mongoose from 'mongoose';
 import moment from 'moment';
 const createJob = async (req, res) => {
-  const { position, company } = req.body;
+  const { title, note } = req.body;
 
-  if (!position || !company) {
+  if (!title || !note) {
     throw new BadRequestError('Please provide all values');
   }
   req.body.createdBy = req.user.userId;
-  const job = await Job.create(req.body);
-  res.status(StatusCodes.CREATED).json({ job });
+  const nte = await Note.create(req.body);
+  res.status(StatusCodes.CREATED).json({ nte });
 };
 const getAllJobs = async (req, res) => {
   const { status, jobType, sort, search } = req.query;
@@ -26,18 +26,14 @@ const getAllJobs = async (req, res) => {
   };
   // add stuff based on condition
 
-  if (status && status !== 'all') {
-    queryObject.status = status;
-  }
-  if (jobType && jobType !== 'all') {
-    queryObject.jobType = jobType;
-  }
+
   if (search) {
-    queryObject.position = { $regex: search, $options: 'i' };
+    queryObject.title = { $regex: search, $options: 'i' };
   }
+  console.log(queryObject)
   // NO AWAIT
 
-  let result = Job.find(queryObject);
+  let result = Note.find(queryObject);
 
   // chain sort conditions
 
@@ -48,13 +44,12 @@ const getAllJobs = async (req, res) => {
     result = result.sort('createdAt');
   }
   if (sort === 'a-z') {
-    result = result.sort('position');
+    result = result.sort('title');
   }
   if (sort === 'z-a') {
-    result = result.sort('-position');
+    result = result.sort('-title');
   }
 
-  //
 
   // setup pagination
   const page = Number(req.query.page) || 1;
@@ -63,21 +58,21 @@ const getAllJobs = async (req, res) => {
 
   result = result.skip(skip).limit(limit);
 
-  const jobs = await result;
+  const jobs = await result; // gets the result at this point
 
-  const totalJobs = await Job.countDocuments(queryObject);
+  const totalJobs = await Note.countDocuments(queryObject);
   const numOfPages = Math.ceil(totalJobs / limit);
 
   res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages });
 };
 const updateJob = async (req, res) => {
   const { id: jobId } = req.params;
-  const { company, position } = req.body;
+  const { note, title } = req.body;
 
-  if (!position || !company) {
+  if (!title || !note) {
     throw new BadRequestError('Please provide all values');
   }
-  const job = await Job.findOne({ _id: jobId });
+  const job = await Note.findOne({ _id: jobId });
 
   if (!job) {
     throw new NotFoundError(`No job with id :${jobId}`);
@@ -86,7 +81,7 @@ const updateJob = async (req, res) => {
 
   checkPermissions(req.user, job.createdBy);
 
-  const updatedJob = await Job.findOneAndUpdate({ _id: jobId }, req.body, {
+  const updatedJob = await Note.findOneAndUpdate({ _id: jobId }, req.body, {
     new: true,
     runValidators: true,
   });
@@ -96,7 +91,7 @@ const updateJob = async (req, res) => {
 const deleteJob = async (req, res) => {
   const { id: jobId } = req.params;
 
-  const job = await Job.findOne({ _id: jobId });
+  const job = await Note.findOne({ _id: jobId });
 
   if (!job) {
     throw new NotFoundError(`No job with id :${jobId}`);
@@ -109,7 +104,7 @@ const deleteJob = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Success! Job removed' });
 };
 const showStats = async (req, res) => {
-  let stats = await Job.aggregate([
+  let stats = await Note.aggregate([
     { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
     { $group: { _id: '$status', count: { $sum: 1 } } },
   ]);
@@ -125,7 +120,7 @@ const showStats = async (req, res) => {
     declined: stats.declined || 0,
   };
 
-  let monthlyApplications = await Job.aggregate([
+  let monthlyApplications = await Note.aggregate([
     { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
     {
       $group: {

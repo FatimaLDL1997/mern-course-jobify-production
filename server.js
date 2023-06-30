@@ -42,7 +42,7 @@ app.use(mongoSanitize());
 app.use(cookieParser());
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/jobs', authenticateUser, jobsRouter);
+app.use('/api/v1/notes', authenticateUser, jobsRouter);
 
 // only when ready to deploy
 app.get('*', (req, res) => {

@@ -1,4 +1,4 @@
-import { FormRow, FormRowSelect, Alert } from '../../components'
+import { FormRow, Note, FormRowSelect, Alert } from '../../components'
 import { useAppContext } from '../../context/appContext'
 import Wrapper from '../../assets/wrappers/DashboardFormPage'
 
@@ -8,9 +8,8 @@ const AddJob = () => {
     isEditing,
     showAlert,
     displayAlert,
-    position,
-    company,
-    jobLocation,
+    title,
+    note,
     jobType,
     jobTypeOptions,
     status,
@@ -24,7 +23,7 @@ const AddJob = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (!position || !company || !jobLocation) {
+    if (!title || !note) {
       displayAlert()
       return
     }
@@ -43,46 +42,49 @@ const AddJob = () => {
   return (
     <Wrapper>
       <form className='form'>
-        <h3>{isEditing ? 'edit job' : 'add job'}</h3>
+        <h3>{isEditing ? 'edit note' : 'add note'}</h3>
         {showAlert && <Alert />}
         <div className='form-center'>
           {/* position */}
           <FormRow
             type='text'
-            name='position'
-            value={position}
+            name='title'
+            value={title}
+
+            // value={position}
             handleChange={handleJobInput}
           />
           {/* company */}
-          <FormRow
+          <Note
             type='text'
-            name='company'
-            value={company}
+            name='note'
+            value={note}
+            // value={company}
             handleChange={handleJobInput}
           />
           {/* location */}
-          <FormRow
+          {/* <FormRow
             type='text'
             labelText='job location'
             name='jobLocation'
             value={jobLocation}
             handleChange={handleJobInput}
-          />
+          /> */}
           {/* job status */}
-          <FormRowSelect
+          {/* <FormRowSelect
             name='status'
             value={status}
             handleChange={handleJobInput}
             list={statusOptions}
-          />
+          /> */}
           {/* job type */}
-          <FormRowSelect
+          {/* <FormRowSelect
             name='jobType'
             labelText='job type'
             value={jobType}
             handleChange={handleJobInput}
             list={jobTypeOptions}
-          />
+          /> */}
           {/* btn container */}
           <div className='btn-container'>
             <button

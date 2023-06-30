@@ -20,10 +20,10 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<Stats />} />
-          <Route path='all-jobs' element={<AllJobs />} />
-          <Route path='add-job' element={<AddJob />} />
-          <Route path='profile' element={<Profile />} />
+          {/* <Route index element={<Stats/>} /> */}
+          <Route index element={<AllJobs/>} />
+          <Route path='add-note' element={<AddJob/>} />
+          <Route path='profile' element={<Profile/>} />
         </Route>
         <Route path='/register' element={<Register />} />
         <Route path='/landing' element={<Landing />} />

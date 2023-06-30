@@ -25,7 +25,7 @@ const Profile = () => {
       <form className='form' onSubmit={handleSubmit}>
         <h3>profile</h3>
         {showAlert && <Alert />}
-        <div className='form-center'>
+        <div className='form-center-profile'>
           <FormRow
             type='text'
             name='name'
@@ -45,12 +45,7 @@ const Profile = () => {
             value={email}
             handleChange={(e) => setEmail(e.target.value)}
           />
-          <FormRow
-            type='text'
-            name='location'
-            value={location}
-            handleChange={(e) => setLocation(e.target.value)}
-          />
+          
           <button className='btn btn-block' type='submit' disabled={isLoading}>
             {isLoading ? 'Please Wait...' : 'save changes'}
           </button>
