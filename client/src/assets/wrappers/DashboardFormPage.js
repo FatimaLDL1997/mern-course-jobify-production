@@ -26,6 +26,7 @@ const Wrapper = styled.section`
     display: flex;
     flex-direction: column;
     text-align: center;
+    align-items: center;
   }
   .form-center-profile {
     display: grid;
