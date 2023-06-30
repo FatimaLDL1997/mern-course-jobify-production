@@ -59,6 +59,8 @@ const Wrapper = styled.section`
       grid-template-columns: 1fr 1fr;
       align-items: center;
       column-gap: 1rem;
+      align-items: start;
+
     }
     .btn-container {
       margin-top: 0;
@@ -67,6 +69,7 @@ const Wrapper = styled.section`
   @media (min-width: 1120px) {
     .form-center {
       grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
     }
     .form-center button {
       margin-top: 0;
